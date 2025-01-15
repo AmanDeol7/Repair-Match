@@ -7,9 +7,9 @@ import { ThemeToggle } from './theme-toggle'
 
 export function Navbar() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
-        <div className="mr-4 flex">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-8 md:px-4">
+      <div className="  flex h-14 items-center">
+        <div className=" flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <WrenchIcon className="h-6 w-6" />
             <span className="font-bold">RepairMatch</span>

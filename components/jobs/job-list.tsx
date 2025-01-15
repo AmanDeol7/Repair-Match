@@ -39,7 +39,7 @@ export function JobList() {
       const { data, error } = await query
 
       if (error) throw error
-      setJobs(data as JobWithProfile[])
+      setJobs(data as unknown as JobWithProfile[])
     } catch (error) {
       console.error('Error fetching jobs:', error)
     } finally {
