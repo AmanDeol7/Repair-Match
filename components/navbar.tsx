@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { WrenchIcon } from 'lucide-react'
 import Link from 'next/link'
 import { ThemeToggle } from './theme-toggle'
-
+import Profile from './Profile'
 export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-8 md:px-4">
@@ -19,7 +19,7 @@ export function Navbar() {
           <nav className="flex items-center space-x-2">
             <Button variant="ghost" asChild>
               <Link href="/jobs">Find Jobs</Link>
-            </Button>
+            </Button> 
             <Button variant="ghost" asChild>
               <Link href="/post">Post Job</Link>
             </Button>
@@ -27,9 +27,7 @@ export function Navbar() {
               <Link href="/repairers">Find Repairers</Link>
             </Button>
             <ThemeToggle />
-            <Button variant="default" asChild>
-              <Link href="/signin">Sign In</Link>
-            </Button>
+            <Profile />
           </nav>
         </div>
       </div>

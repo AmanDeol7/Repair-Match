@@ -63,7 +63,12 @@ export function AuthForm() {
           .single();
   
         if (!profile) throw new Error('Profile not found.');
+        toast({
+          title: 'user signed in',
+          description: '',
+        });
         router.push('/dashboard');
+        
       }
     } catch (error: any) {
       toast({
