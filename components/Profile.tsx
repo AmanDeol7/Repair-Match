@@ -85,6 +85,10 @@ const Profile = () => {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Profile</DropdownMenuItem>
+            <DropdownMenuItem><Link href="/jobs">Find Jobs</Link></DropdownMenuItem>
+            <DropdownMenuItem><Link href="/post">Post Job</Link></DropdownMenuItem>
+            <DropdownMenuItem><Link href="/repairers">Find Repairers</Link></DropdownMenuItem>
+
             <DropdownMenuSeparator />
             <DropdownMenuItem  onClick={handleLogout}>Logout</DropdownMenuItem>
           </DropdownMenuContent>

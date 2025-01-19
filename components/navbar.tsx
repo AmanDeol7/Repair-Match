@@ -9,7 +9,7 @@ import Profile from './Profile'
 
 export function Navbar() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-8 md:px-4">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-8 md:px-4 overflow-hidden">
       <div className="  flex h-14 items-center">
         <div className=" flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
@@ -18,18 +18,21 @@ export function Navbar() {
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <nav className="flex items-center space-x-2">
-            <Button variant="ghost" asChild>
+          <nav className="flex items-center space-x-2 ">
+            
+            <Button variant="ghost"  className='hidden md:block'asChild>
               <Link href="/jobs">Find Jobs</Link>
             </Button> 
-            <Button variant="ghost" asChild>
+            <Button variant="ghost" className='hidden md:block' asChild>
               <Link href="/post">Post Job</Link>
             </Button>
-            <Button variant="ghost" asChild>
+            <Button variant="ghost"  className='hidden md:block' asChild>
               <Link href="/repairers">Find Repairers</Link>
             </Button>
             <ThemeToggle />
-            <Profile />
+           
+            <Profile/>
+            
           </nav>
         </div>
       </div>
