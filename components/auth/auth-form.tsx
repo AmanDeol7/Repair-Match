@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { supabase } from '@/lib/supabase/client'
 import { useToast } from '@/hooks/use-toast'
-
+import { useAuth } from '@/hooks/use-auth'
 
 export function AuthForm() {
   const [isSignUp, setIsSignUp] = useState(false)
@@ -18,9 +18,11 @@ export function AuthForm() {
   const [role, setRole] = useState<'requester' | 'repairer'>('requester')
   const { toast } = useToast()
   const router = useRouter()
+  const {user, isLoading, isAuthenticated} = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
       if (isSignUp) {
         // Signup logic
@@ -56,13 +58,14 @@ export function AuthForm() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
   
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('email', email)
-          .single();
+        // const { data: profile } = await supabase
+        //   .from('profiles')
+        //   .select('*')
+        //   .eq('email', email)
+        //   .single();
+        
   
-        if (!profile) throw new Error('Profile not found.');
+        // if (!user) throw new Error('Profile not found.');
         toast({
           title: 'user signed in',
           description: '',
@@ -78,6 +81,10 @@ export function AuthForm() {
       });
     }
   };
+  if( isAuthenticated){
+    router.push("/dashboard");
+    
+  }
   
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
