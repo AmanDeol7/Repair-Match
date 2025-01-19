@@ -15,9 +15,10 @@ import { supabase } from '@/lib/supabase/client'
 import type { JobWithProfile } from '@/lib/types/job'
 import type { Bid } from '@/lib/types/bid'
 
+
 export default function JobDetailsPage() {
   const { id } = useParams()
-  const { user } = useAuth()
+  const { user } = useAuth()  
   const [job, setJob] = useState<JobWithProfile | null>(null)
   const [bids, setBids] = useState<Bid[]>([])
   const [loading, setLoading] = useState(true)
@@ -27,33 +28,33 @@ export default function JobDetailsPage() {
       const { data: jobData, error: jobError } = await supabase
         .from('repair_jobs')
         .select(`
-          *,
-          profiles:requester_id (
-            full_name,
-            avatar_url,
-            rating
-          )
-        `)
+          *
+         , profiles:requester_id (
+          full_name,
+          avatar_url,
+          rating
+        )`)
         .eq('id', id)
         .single()
-
+      console.log(jobData)
       if (jobError) throw jobError
       setJob(jobData)
 
       const { data: bidsData, error: bidsError } = await supabase
         .from('bids')
         .select(`
-          *,
-          profiles:repairer_id (
-            full_name,
-            avatar_url,
-            rating
-          )
-        `)
+          *
+        ,profiles:requester_id (
+          full_name,
+          avatar_url,
+          rating
+        )`)
         .eq('job_id', id)
         .order('created_at', { ascending: false })
 
       if (bidsError) throw bidsError
+      console.log(bidsData)
+
       setBids(bidsData)
     } catch (error) {
       console.error('Error fetching job details:', error)
