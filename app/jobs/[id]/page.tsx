@@ -1,80 +1,84 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
-import { formatDistance } from 'date-fns'
-import { MapPin } from 'lucide-react'
-import { useAuth } from '@/hooks/use-auth'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { BidForm } from '@/components/jobs/bid-form'
-import { BidList } from '@/components/jobs/bid-list'
-import { supabase } from '@/lib/supabase/client'
-import type { JobWithProfile } from '@/lib/types/job'
-import type { Bid } from '@/lib/types/bid'
-
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { formatDistance } from "date-fns";
+import { MapPin } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BidForm } from "@/components/jobs/bid-form";
+import { BidList } from "@/components/jobs/bid-list";
+import { supabase } from "@/lib/supabase/client";
+import type { JobWithProfile } from "@/lib/types/job";
+import type { Bid } from "@/lib/types/bid";
 
 export default function JobDetailsPage() {
-  const { id } = useParams()
-  const { user } = useAuth()  
-  const [job, setJob] = useState<JobWithProfile | null>(null)
-  const [bids, setBids] = useState<Bid[]>([])
-  const [loading, setLoading] = useState(true)
+  const { id } = useParams();
+  const { user } = useAuth();
+  const [job, setJob] = useState<JobWithProfile | null>(null);
+  const [bids, setBids] = useState<Bid[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchJobDetails = async () => {
     try {
       const { data: jobData, error: jobError } = await supabase
-        .from('repair_jobs')
-        .select(`
+        .from("repair_jobs")
+        .select(
+          `
           *
          , profiles:requester_id (
           full_name,
           avatar_url,
           rating
-        )`)
-        .eq('id', id)
-        .single()
-      console.log(jobData)
-      if (jobError) throw jobError
-      setJob(jobData)
+        )`
+        )
+        .eq("id", id)
+        .single();
+      console.log(jobData);
+      if (jobError) throw jobError;
+      setJob(jobData as unknown as JobWithProfile);
 
       const { data: bidsData, error: bidsError } = await supabase
-        .from('bids')
-        .select(`
-          *
+        .from("bids")
+        .select(
+          `*
         ,profiles:requester_id (
           full_name,
           avatar_url,
           rating
-        )`)
-        .eq('job_id', id)
-        .order('created_at', { ascending: false })
+        )`
+        )
+        .eq("job_id", id)
+        .order("created_at", { ascending: false });
 
-      if (bidsError) throw bidsError
-      console.log(bidsData)
+      if (bidsError) throw bidsError;
+      console.log(bidsData);  
 
-      setBids(bidsData)
+      setBids(bidsData as unknown as Bid[]);
     } catch (error) {
-      console.error('Error fetching job details:', error)
+      console.error("Error fetching job details:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchJobDetails()
-  }, [id])
+    fetchJobDetails();
+  }, [id]);
 
   if (loading || !job) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
-  const isRequester = user?.id === job.requester_id
-  const isRepairer = user?.id !== job.requester_id
-  const canBid = isRepairer && job.status === 'open'
-  const timeAgo = formatDistance(new Date(job.created_at), new Date(), { addSuffix: true })
+  const isRequester = user?.id === job.requester_id;
+  const isRepairer = user?.id !== job.requester_id;
+  const canBid = isRepairer && job.status === "open";
+  const timeAgo = formatDistance(new Date(job.created_at), new Date(), {
+    addSuffix: true,
+  });
 
   return (
     <div className="container py-8">
@@ -91,7 +95,7 @@ export default function JobDetailsPage() {
                 <p className="text-sm text-muted-foreground">{timeAgo}</p>
               </div>
             </div>
-            <Badge variant={job.status === 'open' ? 'default' : 'secondary'}>
+            <Badge variant={job.status === "open" ? "default" : "secondary"}>
               {job.status}
             </Badge>
           </div>
@@ -132,5 +136,5 @@ export default function JobDetailsPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
