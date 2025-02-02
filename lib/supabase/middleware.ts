@@ -56,7 +56,7 @@ export async function updateSession(request: NextRequest) {
     console.log(request.nextUrl.pathname)
     url.pathname = '/signin?next='+request.nextUrl.pathname;
 
-    return NextResponse.redirect
+    return NextResponse.redirect(url);  
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're

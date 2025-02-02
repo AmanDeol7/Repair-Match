@@ -9,7 +9,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { supabase } from '@/lib/supabase/client'
 import { useToast } from '@/hooks/use-toast'
 import { useAuth } from '@/hooks/use-auth'
-
+import { FcGoogle } from 'react-icons/fc'
 export function AuthForm() {
   const [isSignUp, setIsSignUp] = useState(false)
   const [email, setEmail] = useState('')
@@ -19,6 +19,10 @@ export function AuthForm() {
   const { toast } = useToast()
   const router = useRouter()
   const {user, isLoading, isAuthenticated} = useAuth();
+  const [businessName, setBusinessName] = useState('')
+  const [address, setAddress] = useState('')
+  const [city, setCity] = useState('')
+  const [pincode, setPincode] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,16 +38,24 @@ export function AuthForm() {
         });
         if (authError) throw authError;
         
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert({
-            id: authData.user!.id,
-            email,
-            password,
-            full_name: fullName,
-            role,
-            avatar_url: `https://api.dicebear.com/7.x/initials/svg?seed=${fullName}`,
-          })
+        const profileData: any = {
+          id: authData.user!.id,
+          email,
+          password,
+          full_name: fullName,
+          role,
+          avatar_url: `https://api.dicebear.com/7.x/initials/svg?seed=${fullName}`,
+        }
+
+        // Include repairer-specific fields
+        if (role === 'repairer') {
+          profileData.business_name = businessName
+          profileData.address = address
+          profileData.city = city
+          profileData.pincode = pincode
+        }
+
+        const { error: profileError } = await supabase.from('profiles').insert(profileData)
         if (profileError) throw profileError
        
         
@@ -84,6 +96,16 @@ export function AuthForm() {
   if( isAuthenticated){
     router.push("/dashboard");
     
+  }
+
+  const handleSignInWithOauth = (provider:"google")=> {
+    supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: location.origin+ "/auth/callback"
+      }
+    });
+
   }
   
   return (
@@ -132,11 +154,53 @@ export function AuthForm() {
               </div>
             </RadioGroup>
           </div>
+          {role === 'repairer' && (
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="businessName">Business Name</Label>
+                <Input
+                  id="businessName"
+                  value={businessName}
+                  onChange={(e) => setBusinessName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="address">Address</Label>
+                <Input
+                  id="address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="city">City</Label>
+                <Input
+                  id="city"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="pincode">Pincode</Label>
+                <Input
+                  id="pincode"
+                  value={pincode}
+                  onChange={(e) => setPincode(e.target.value)}
+                  required
+                />
+              </div>
+            </>
+          )}
         </>
       )}
+
       <Button type="submit" className="w-full">
         {isSignUp ? 'Sign Up' : 'Sign In'}
       </Button>
+      <Button type='button' variant="outline" className='w-full' onClick={() => handleSignInWithOauth("google")}> <FcGoogle size={20}/>  {isSignUp ? 'Sign up with Google' : "Sign in with Google"}</Button>
       <Button
         type="button"
         variant="ghost"
