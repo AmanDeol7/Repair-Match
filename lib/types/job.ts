@@ -1,10 +1,12 @@
 export interface Job {
   id: string
-  title: string
+  title: string 
   description: string
   budget: number
   category: string
   location: string
+  latitude: number
+  longitude: number
   status: 'open' | 'in_progress' | 'completed'
   created_at: string
   requester_id: string

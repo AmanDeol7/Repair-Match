@@ -10,6 +10,9 @@ import { supabase } from '@/lib/supabase/client'
 import { useToast } from '@/hooks/use-toast'
 import { useAuth } from '@/hooks/use-auth'
 import { FcGoogle } from 'react-icons/fc'
+import bcrypt from 'bcryptjs';
+
+
 export function AuthForm() {
   const [isSignUp, setIsSignUp] = useState(false)
   const [email, setEmail] = useState('')
@@ -30,6 +33,7 @@ export function AuthForm() {
     try {
       if (isSignUp) {
         // Signup logic
+        const hashedPassword = await bcrypt.hash(password, 10);
         const { data: authData, error: authError } = await supabase.auth.signUp({
           
 
@@ -41,7 +45,7 @@ export function AuthForm() {
         const profileData: any = {
           id: authData.user!.id,
           email,
-          password,
+          password:hashedPassword,
           full_name: fullName,
           role,
           avatar_url: `https://api.dicebear.com/7.x/initials/svg?seed=${fullName}`,
@@ -67,8 +71,20 @@ export function AuthForm() {
         setIsSignUp(false);
       } else {
         // Sign-in logic
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        const { data: userData, error: userError } = await supabase
+        .from('profiles')
+        .select('password')
+        .eq('email', email)
+        .single();
+
+      if (userError) throw new Error('User not found.');
+      
+      if (!userData.password) throw new Error('Invalid credentials');
+      const isPasswordValid = await bcrypt.compare(password, userData.password);
+      if (!isPasswordValid) throw new Error('Invalid credentials');
+
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
   
         // const { data: profile } = await supabase
         //   .from('profiles')
@@ -94,7 +110,7 @@ export function AuthForm() {
     }
   };
   if( isAuthenticated){
-    router.push("/dashboard");
+    router.push("/dash");
     
   }
 

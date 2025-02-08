@@ -27,21 +27,47 @@ export function JobForm() {
   const [budget, setBudget] = useState('')
   const [category, setCategory] = useState('')
   const [location, setLocation] = useState('')
+  const [latitude, setLatitude] = useState('')
+  const [longitude, setLongitude] = useState('')
   const { user } = useAuth()
   const { toast } = useToast()
   const router = useRouter()
+
+  const handleLocationSearch = async (address: string) => {
+    try {
+      const response = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`
+      )
+      const data = await response.json()
+      
+      if (data.features && data.features.length > 0) {
+        const [lng, lat] = data.features[0].center
+        setLatitude(lat.toString())
+        setLongitude(lng.toString())
+      }
+    } catch (error) {
+      console.error('Error geocoding address:', error)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!user) return
 
     try {
+      // Geocode the location if coordinates aren't set
+      if (!latitude || !longitude) {
+        await handleLocationSearch(location)
+      }
+
       const { error } = await supabase.from('repair_jobs').insert({
         title,
         description,
         budget: parseFloat(budget),
         category,
         location,
+        latitude,
+        longitude,
         requester_id: user.id,
       })
 
@@ -120,7 +146,13 @@ export function JobForm() {
         <Input
           id="location"
           value={location}
-          onChange={(e) => setLocation(e.target.value)}
+          onChange={(e) => {
+            setLocation(e.target.value)
+            // Clear coordinates when location changes
+            setLatitude('')
+            setLongitude('')
+          }}
+          onBlur={() => handleLocationSearch(location)}
           placeholder="Enter your location"
           required
         />

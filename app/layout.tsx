@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import { Providers } from '@/components/providers'
 import { Navbar } from '@/components/navbar'
 import { Toaster } from '@/components/ui/toaster'
+import 'mapbox-gl/dist/mapbox-gl.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
+
         <Providers>
           <Navbar />
           <main className="min-h-screen bg-background">
@@ -27,6 +29,7 @@ export default function RootLayout({
           </main>
           <Toaster />
         </Providers>
+        
       </body>
     </html>
   )

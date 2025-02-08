@@ -170,7 +170,9 @@ export type Database = {
           created_at: string | null
           description: string
           id: string
+          latitude: number | null
           location: string
+          longitude: number | null
           repairer_id: string | null
           requester_id: string
           status: string
@@ -183,7 +185,9 @@ export type Database = {
           created_at?: string | null
           description: string
           id?: string
+          latitude?: number | null
           location: string
+          longitude?: number | null
           repairer_id?: string | null
           requester_id: string
           status?: string
@@ -196,7 +200,9 @@ export type Database = {
           created_at?: string | null
           description?: string
           id?: string
+          latitude?: number | null
           location?: string
+          longitude?: number | null
           repairer_id?: string | null
           requester_id?: string
           status?: string

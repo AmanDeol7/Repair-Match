@@ -22,7 +22,7 @@ export function Navbar() {
             
             <Button variant="ghost"  className='hidden md:block'asChild>
               <Link href="/jobs">Find Jobs</Link>
-            </Button> 
+            </Button>   
             <Button variant="ghost" className='hidden md:block' asChild>
               <Link href="/post">Post Job</Link>
             </Button>
