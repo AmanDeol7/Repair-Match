@@ -66,8 +66,8 @@ export function JobForm() {
         budget: parseFloat(budget),
         category,
         location,
-        latitude,
-        longitude,
+        latitude:parseFloat(latitude),
+        longitude:parseFloat(longitude),
         requester_id: user.id,
       })
 
