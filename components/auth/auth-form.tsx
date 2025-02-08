@@ -102,7 +102,7 @@ export function AuthForm() {
     supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: location.origin+ "/auth/callback"
+        redirectTo:  "/dashboard"
       }
     });
 
@@ -200,7 +200,7 @@ export function AuthForm() {
       <Button type="submit" className="w-full">
         {isSignUp ? 'Sign Up' : 'Sign In'}
       </Button>
-      <Button type='button' variant="outline" className='w-full' onClick={() => handleSignInWithOauth("google")}> <FcGoogle size={20}/>  {isSignUp ? 'Sign up with Google' : "Sign in with Google"}</Button>
+      {!isSignUp&& <Button type='button' variant="outline" className='w-full' onClick={() => handleSignInWithOauth("google")}> <FcGoogle size={20}/> Sign in with Google</Button>}
       <Button
         type="button"
         variant="ghost"
