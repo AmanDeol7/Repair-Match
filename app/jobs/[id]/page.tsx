@@ -16,7 +16,7 @@ import type { JobWithProfile } from "@/lib/types/job";
 import type { Bid } from "@/lib/types/bid";
 
 export default function JobDetailsPage() {
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
   const { user } = useAuth();
   const [job, setJob] = useState<JobWithProfile | null>(null);
   const [bids, setBids] = useState<Bid[]>([]);
