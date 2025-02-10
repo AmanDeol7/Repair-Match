@@ -27,7 +27,7 @@ export default function Home() {
           <JobSelect />
         </div>
       </section>
-      <section className="container space-y-6 py-8 md:py-12 lg:py-24">
+      <section className=" space-y-6 py-8 md:py-12 lg:py-24">
         <div className="mx-auto grid justify-center gap-4 sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-3">
           <div className="relative overflow-hidden rounded-lg border bg-background p-2">
             <div className="flex h-[180px] flex-col justify-between rounded-md p-6">

@@ -42,17 +42,16 @@ export default function JobDetailsPage() {
       setJob(jobData as unknown as JobWithProfile);
 
       const { data: bidsData, error: bidsError } = await supabase
-        .from("bids")
-        .select(
-          `*
-        ,profiles:requester_id (
-          full_name,
-          avatar_url,
-          rating
-        )`
-        )
-        .eq("job_id", id)
-        .order("created_at", { ascending: false });
+      .from("bids")
+      .select(`
+        *,
+        repair_jobs!inner(requester_id),
+        profiles!inner(id, full_name, avatar_url, rating)
+      `)
+      .eq("job_id", id)
+      .order("created_at", { ascending: false });
+    
+
 
       if (bidsError) throw bidsError;
       console.log(bidsData);  

@@ -30,7 +30,7 @@ const JobSelect = () => {
                 )
             ) : (
                 <>
-                    <Button size="lg" className="bg-emerald-900" asChild>
+                    <Button size="lg" className="" asChild>
                         <Link href="/signin">Find Jobs</Link>
                     </Button>
                     <Button size="lg" variant="outline"  asChild>
