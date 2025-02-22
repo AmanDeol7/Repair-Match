@@ -110,7 +110,7 @@ export function AuthForm() {
     }
   };
   if( isAuthenticated){
-    router.push("/dash");
+    router.push("/dashboard");
     
   }
 

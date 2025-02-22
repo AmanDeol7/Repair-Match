@@ -2,7 +2,7 @@ import type { Config } from 'tailwindcss';
 
 const svgToDataUri = require("mini-svg-data-uri");
  
-import colors from "tailwindcss/colors";
+import colors, { green } from "tailwindcss/colors";
 import { default as flattenColorPalette } from "tailwindcss/lib/util/flattenColorPalette";
 
 const config: Config = {
@@ -31,6 +31,7 @@ const config: Config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        
         popover: {
           DEFAULT: 'hsl(var(--popover))',
           foreground: 'hsl(var(--popover-foreground))',
@@ -42,6 +43,7 @@ const config: Config = {
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
+          
         },
         muted: {
           DEFAULT: 'hsl(var(--muted))',

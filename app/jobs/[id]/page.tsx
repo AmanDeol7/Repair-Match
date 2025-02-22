@@ -80,7 +80,7 @@ export default function JobDetailsPage() {
   });
 
   return (
-    <div className="container py-8">
+    <div className=" px-[4rem] py-8">
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between mb-4">

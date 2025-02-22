@@ -123,10 +123,11 @@ export type Database = {
           email: string | null
           full_name: string | null
           id: string
+          logo: string | null
           password: string | null
           pincode: string | null
           rating: number | null
-          role: string | null
+          role: string
           updated_at: string | null
         }
         Insert: {
@@ -139,10 +140,11 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id: string
+          logo?: string | null
           password?: string | null
           pincode?: string | null
           rating?: number | null
-          role?: string | null
+          role: string
           updated_at?: string | null
         }
         Update: {
@@ -155,10 +157,11 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          logo?: string | null
           password?: string | null
           pincode?: string | null
           rating?: number | null
-          role?: string | null
+          role?: string
           updated_at?: string | null
         }
         Relationships: []

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { JobList } from '@/components/jobs/job-list'
-import { JobMap } from '@/components/map/job-map'
+import JobMap from '@/components/map/job-map'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { supabase } from '@/lib/supabase/client'
 import type { JobWithProfile } from '@/lib/types/job'
@@ -42,13 +42,14 @@ export default function JobsPage() {
 
     fetchJobs()
   }, [])
-
+  console.log(jobs);
+  
   if (loading) {
     return <div>Loading...</div>
   }
 
   return (
-    <div className="container py-8">
+    <div className="px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Available Repair Jobs</h1>
       
       <Tabs defaultValue="list" className="space-y-4">
@@ -64,7 +65,7 @@ export default function JobsPage() {
         <TabsContent value="map">
           <JobMap jobs={jobs} />
         </TabsContent>
-      </Tabs>
+      </Tabs> 
     </div>
   )
 }

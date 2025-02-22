@@ -15,7 +15,7 @@ export function JobCard({ job }: JobCardProps) {
   const timeAgo = formatDistance(new Date(job.created_at), new Date(), { addSuffix: true })
   
   return (
-    <Card>
+    <Card className=''>
       <CardHeader className="space-y-1">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">

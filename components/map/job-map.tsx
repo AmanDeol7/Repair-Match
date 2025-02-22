@@ -14,7 +14,7 @@ interface JobMapProps {
   jobs: JobWithProfile[]
 }
 
-export function JobMap({ jobs }: JobMapProps) {
+export default function JobMap({ jobs }: JobMapProps) {
   const [selectedJob, setSelectedJob] = useState<JobWithProfile | null>(null)
   const [viewport, setViewport] = useState({
     latitude: 40.7128,
@@ -40,9 +40,11 @@ export function JobMap({ jobs }: JobMapProps) {
     }
   }, [])
 
+
+
   return (
     <div className="h-[600px] w-full rounded-lg overflow-hidden">
-      <Map reuseMaps
+      <Map 
         {...viewport}
         onMove={evt => setViewport(evt.viewState)}
         mapStyle="mapbox://styles/mapbox/streets-v12"

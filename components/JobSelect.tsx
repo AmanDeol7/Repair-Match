@@ -20,7 +20,7 @@ const JobSelect = () => {
                     </Button>
                 ) : (
                     <>
-                    <Button size="lg"  asChild>
+                    <Button size="lg" className="custom-green" asChild>
                         <Link href="/post">Post a Job</Link>
                     </Button>
                     <Button size="lg" variant={"outline"} asChild>

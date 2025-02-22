@@ -77,7 +77,7 @@ export default function MyJobsPage() {
   }
 
   return (
-    <div className="container py-8">
+    <div className="px-4 py-8">
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">My Jobs</CardTitle>

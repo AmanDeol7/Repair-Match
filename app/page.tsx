@@ -11,7 +11,7 @@ export default function Home() {
       {/* Radial gradient for the container to give a faded look */}
       {/* <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div> */}
       
-      <div className="h-[50rem] w-full bg- dark:bg-black bg-white  dark:bg-dot-emerald-500/[0.25] bg-dot-emerald-500/[0.25] relative flex items-center justify-center">
+      {/* <div className="h-[50rem] w-full bg- dark:bg-black bg-white  dark:bg-dot-emerald-500/[0.25] bg-dot-emerald-500/[0.25] relative flex items-center justify-center"> */}
 
     
     <div className="flex min-h-[calc(100vh-3.5rem)] flex-col justify-center items-center px-4 w-full">
@@ -62,7 +62,7 @@ export default function Home() {
         </div>
       </section>
     </div>
-    </div>
+ 
     
     </>
   )
