@@ -23,6 +23,7 @@ export function JobList() {
           )
         `)
         .order('created_at', { ascending: false })
+        .eq('status', 'open')
 
       if (filters.category !== 'All') {
         query = query.eq('category', filters.category)

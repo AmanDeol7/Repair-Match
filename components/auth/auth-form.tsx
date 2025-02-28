@@ -26,6 +26,10 @@ export function AuthForm() {
   const [address, setAddress] = useState('')
   const [city, setCity] = useState('')
   const [pincode, setPincode] = useState('')
+  const [location, setLocation] = useState('')
+  const [latitude, setLatitude] = useState('')
+  const [longitude, setLongitude] = useState('')
+  const [suggestions, setSuggestions] = useState<{ place_name: string, center: [number, number] }[]>([])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,6 +118,39 @@ export function AuthForm() {
     
   }
 
+  const handleLocationChange = async (query: string) => {
+    setLocation(query)
+    if (!query) {
+      setSuggestions([])
+      return
+    }
+
+    try {
+      const response = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}&autocomplete=true&limit=5`
+      )
+      const data = await response.json()
+
+      if (data.features) {
+        setSuggestions(data.features.map((feature: any) => ({
+          place_name: feature.place_name,
+          center: feature.center,
+        })))
+      }
+    } catch (error) {
+      console.error('Error fetching location suggestions:', error)
+    }
+  }
+
+
+  // Handle selection of a suggested location
+  const handleSelectLocation = (place: { place_name: string, center: [number, number] }) => {
+    setLocation(place.place_name)
+    setLatitude(place.center[1].toString())
+    setLongitude(place.center[0].toString())
+    setSuggestions([])
+  }
+
   const handleSignInWithOauth = (provider:"google")=> {
     supabase.auth.signInWithOAuth({
       provider,
@@ -185,10 +222,23 @@ export function AuthForm() {
                 <Label htmlFor="address">Address</Label>
                 <Input
                   id="address"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
+                  value={location}
+                  onChange={(e) => {setAddress(e.target.value), handleLocationChange(e.target.value)} }
                   required
                 />
+                 {suggestions.length > 0 && (
+          <ul className="absolute z-10 bg-white border rounded shadow-md w-full mt-1">
+            {suggestions.map((place, index) => (
+              <li
+                key={index}
+                className="p-2 hover:bg-gray-100 cursor-pointer"
+                onClick={() => handleSelectLocation(place)}
+              >
+                {place.place_name}
+              </li>
+            ))}
+          </ul>
+        )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="city">City</Label>

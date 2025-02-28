@@ -10,7 +10,7 @@ import { JobCard } from '@/components/jobs/job-card'
 import { supabase } from '@/lib/supabase/client'
 import type { JobWithProfile } from '@/lib/types/job'
 import type { Bid } from '@/lib/types/bid'
-
+import BackButton from '@/components/back-button'
 export default function MyJobsPage() {
   const { user } = useAuth()
   const { data: profile } = useProfile(user?.id)
@@ -78,9 +78,12 @@ export default function MyJobsPage() {
 
   return (
     <div className="px-4 py-8">
+        <div className='mb-4'>
+              <BackButton />
+        </div>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">My Jobs</CardTitle>
+          <CardTitle className="text-2xl">My Jobs</CardTitle> 
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="posted" className="space-y-4">

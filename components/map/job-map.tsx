@@ -43,7 +43,7 @@ export default function JobMap({ jobs }: JobMapProps) {
 
 
   return (
-    <div className="h-[600px] w-full rounded-lg overflow-hidden">
+    <div className="h-[600px] w-full  rounded-lg overflow-hidden">
       <Map 
         {...viewport}
         onMove={evt => setViewport(evt.viewState)}

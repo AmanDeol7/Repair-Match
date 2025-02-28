@@ -14,7 +14,8 @@ import { BidList } from "@/components/jobs/bid-list";
 import { supabase } from "@/lib/supabase/client";
 import type { JobWithProfile } from "@/lib/types/job";
 import type { Bid } from "@/lib/types/bid";
-
+import { Button } from "@/components/ui/button";
+import BackButton from "@/components/back-button";
 export default function JobDetailsPage() {
   const { id } = useParams() as { id: string };
   const { user } = useAuth();
@@ -27,35 +28,21 @@ export default function JobDetailsPage() {
       const { data: jobData, error: jobError } = await supabase
         .from("repair_jobs")
         .select(
-          `
-          *
-         , profiles:requester_id (
-          full_name,
-          avatar_url,
-          rating
-        )`
+          `*, profiles:requester_id (full_name, avatar_url, rating)`
         )
         .eq("id", id)
         .single();
-      console.log(jobData);
+
       if (jobError) throw jobError;
       setJob(jobData as unknown as JobWithProfile);
 
       const { data: bidsData, error: bidsError } = await supabase
-      .from("bids")
-      .select(`
-        *,
-        repair_jobs!inner(requester_id),
-        profiles!inner(id, full_name, avatar_url, rating)
-      `)
-      .eq("job_id", id)
-      .order("created_at", { ascending: false });
-    
-
+        .from("bids")
+        .select(`*, profiles!inner(id, full_name, avatar_url, rating)`)
+        .eq("job_id", id)
+        .order("created_at", { ascending: false });
 
       if (bidsError) throw bidsError;
-      console.log(bidsData);  
-
       setBids(bidsData as unknown as Bid[]);
     } catch (error) {
       console.error("Error fetching job details:", error);
@@ -67,6 +54,22 @@ export default function JobDetailsPage() {
   useEffect(() => {
     fetchJobDetails();
   }, [id]);
+
+  const closeJob = async () => {
+    if (!job) return;
+
+    try {
+      const { error } = await supabase
+        .from("repair_jobs")
+        .update({ status: "closed" })
+        .eq("id", job.id);
+
+      if (error) throw error;
+      fetchJobDetails(); // Refresh job details
+    } catch (error) {
+      console.error("Error closing job:", error);
+    }
+  };
 
   if (loading || !job) {
     return <div>Loading...</div>;
@@ -80,7 +83,10 @@ export default function JobDetailsPage() {
   });
 
   return (
-    <div className=" px-[4rem] py-8">
+    <div className="px-[4rem] py-8">
+      <div className="mb-4">
+      <BackButton />
+      </div>
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between mb-4">
@@ -119,12 +125,7 @@ export default function JobDetailsPage() {
               {canBid && <TabsTrigger value="place-bid">Place Bid</TabsTrigger>}
             </TabsList>
             <TabsContent value="bids" className="mt-4">
-              <BidList
-                bids={bids}
-                jobId={job.id}
-                isRequester={isRequester}
-                onBidAccepted={fetchJobDetails}
-              />
+              <BidList bids={bids} jobId={job.id} isRequester={isRequester} onBidAccepted={fetchJobDetails} />
             </TabsContent>
             {canBid && (
               <TabsContent value="place-bid" className="mt-4">
@@ -132,6 +133,12 @@ export default function JobDetailsPage() {
               </TabsContent>
             )}
           </Tabs>
+
+          {isRequester && job.status === "open" && (
+            <Button className="bg-red-700 hover:bg-red-800" onClick={closeJob}>
+              Close Job
+            </Button>
+          )}
         </CardContent>
       </Card>
     </div>

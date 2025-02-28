@@ -6,7 +6,7 @@ import JobMap from '@/components/map/job-map'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { supabase } from '@/lib/supabase/client'
 import type { JobWithProfile } from '@/lib/types/job'
-
+import BackButton from '@/components/back-button'
 export default function JobsPage() {
   const [jobs, setJobs] = useState<JobWithProfile[]>([])
   const [loading, setLoading] = useState(true)
@@ -50,6 +50,9 @@ export default function JobsPage() {
 
   return (
     <div className="px-4 py-8">
+      <div className='mb-4'>
+      <BackButton />
+      </div>
       <h1 className="text-3xl font-bold mb-8">Available Repair Jobs</h1>
       
       <Tabs defaultValue="list" className="space-y-4">
@@ -63,7 +66,9 @@ export default function JobsPage() {
         </TabsContent>
 
         <TabsContent value="map">
+          <div className='px-8 py-8'>
           <JobMap jobs={jobs} />
+          </div>
         </TabsContent>
       </Tabs> 
     </div>

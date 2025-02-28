@@ -84,7 +84,7 @@ const Profile = () => {
           <DropdownMenuContent>
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
+            <DropdownMenuItem><Link href="/dashboard">Profile</Link></DropdownMenuItem>
             {userInfo?.role == "repairer" && <DropdownMenuItem><Link href="/jobs">Find Jobs</Link></DropdownMenuItem>}
             {userInfo?.role == "requester" &&<DropdownMenuItem><Link href="/post">Post Job</Link></DropdownMenuItem>}
             {userInfo?.role == "requester" &&<DropdownMenuItem><Link href="/repairers">Find Repairers</Link></DropdownMenuItem>}
