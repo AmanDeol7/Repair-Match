@@ -155,7 +155,7 @@ export function AuthForm() {
     supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo:  "/dashboard"
+        redirectTo:  "https://repair-match-kjhs6chfl-aman-deols-projects.vercel.app/dashboard"
       }
     });
 
