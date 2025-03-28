@@ -54,7 +54,7 @@ export function JobForm() {
     }
   }
 
-  // Handle selection of a suggested location
+
   const handleSelectLocation = (place: { place_name: string, center: [number, number] }) => {
     setLocation(place.place_name)
     setLatitude(place.center[1].toString())
@@ -128,7 +128,7 @@ export function JobForm() {
           required
         />
         {suggestions.length > 0 && (
-          <ul className="absolute z-10 bg-white border rounded shadow-md w-full mt-1">
+          <ul className="absolute z-10 bg-white border rounded shadow-md w-full mt-1 text-black">
             {suggestions.map((place, index) => (
               <li
                 key={index}

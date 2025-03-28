@@ -16,6 +16,7 @@ import type { JobWithProfile } from "@/lib/types/job";
 import type { Bid } from "@/lib/types/bid";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/back-button";
+import { ChatWindow } from '@/components/messages/chat-window'
 export default function JobDetailsPage() {
   const { id } = useParams() as { id: string };
   const { user } = useAuth();
@@ -70,13 +71,15 @@ export default function JobDetailsPage() {
       console.error("Error closing job:", error);
     }
   };
-
+  
   if (loading || !job) {
     return <div>Loading...</div>;
   }
-
+  
   const isRequester = user?.id === job.requester_id;
   const isRepairer = user?.id !== job.requester_id;
+  const otherUserId = isRequester ? job.repairer_id : job.requester_id
+  const otherUserName = isRequester ? 'Repairer' : job.profiles.full_name
   const canBid = isRepairer && job.status === "open";
   const timeAgo = formatDistance(new Date(job.created_at), new Date(), {
     addSuffix: true,
@@ -123,6 +126,9 @@ export default function JobDetailsPage() {
             <TabsList>
               <TabsTrigger value="bids">Bids ({bids.length})</TabsTrigger>
               {canBid && <TabsTrigger value="place-bid">Place Bid</TabsTrigger>}
+              {job.status === 'in_progress' && (
+                <TabsTrigger value="chat">Chat</TabsTrigger>
+              )}
             </TabsList>
             <TabsContent value="bids" className="mt-4">
               <BidList bids={bids} jobId={job.id} isRequester={isRequester} onBidAccepted={fetchJobDetails} />
@@ -132,6 +138,16 @@ export default function JobDetailsPage() {
                 <BidForm jobId={job.id} onBidSubmitted={fetchJobDetails} />
               </TabsContent>
             )}
+            {job.status === 'in_progress' && otherUserId && (
+              <TabsContent value="chat" className="mt-4">
+                <ChatWindow
+                  jobId={job.id}
+                  otherUserId={otherUserId}
+                  otherUserName={otherUserName}
+                />
+              </TabsContent>
+            )}
+           
           </Tabs>
 
           {isRequester && job.status === "open" && (

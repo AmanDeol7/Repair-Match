@@ -15,9 +15,14 @@ const JobSelect = () => {
         <div className="space-x-4">
             {isAuthenticated ? (
                 profile?.role === "repairer" ? (
+                    <>
                     <Button size="lg"  asChild>
                         <Link href="/jobs">Find Jobs</Link>
                     </Button>
+                     <Button size="lg" variant={"outline"} asChild>
+                     <Link href="/jobs/my-jobs">My Jobs</Link>
+                     </Button>
+                     </>
                 ) : (
                     <>
                     <Button size="lg" className="custom-green" asChild>

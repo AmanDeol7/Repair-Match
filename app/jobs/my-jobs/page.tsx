@@ -88,17 +88,17 @@ export default function MyJobsPage() {
         <CardContent>
           <Tabs defaultValue="posted" className="space-y-4">
             <TabsList>
-              <TabsTrigger value="posted">
+              {profile?.role ==='requester' &&<TabsTrigger value="posted">
                 Posted Jobs ({postedJobs.length})
-              </TabsTrigger>
+              </TabsTrigger>}
+              
               {profile?.role === 'repairer' && (
                 <TabsTrigger value="bids">
                   Jobs I've Bid On ({bidJobs.length})
                 </TabsTrigger>
               )}
             </TabsList>
-
-            <TabsContent value="posted">
+            {profile?.role === 'requester'&& <TabsContent value="posted">
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {postedJobs.map((job) => (
                   <JobCard key={job.id} job={job} />
@@ -109,7 +109,8 @@ export default function MyJobsPage() {
                   </div>
                 )}
               </div>
-            </TabsContent>
+            </TabsContent> }
+            
 
             {profile?.role === 'repairer' && (
               <TabsContent value="bids">

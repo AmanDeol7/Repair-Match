@@ -11,9 +11,10 @@ import { useToast } from '@/hooks/use-toast'
 import { useAuth } from '@/hooks/use-auth'
 import { FcGoogle } from 'react-icons/fc'
 import bcrypt from 'bcryptjs';
-
+import { useQueryClient } from '@tanstack/react-query'
 
 export function AuthForm() {
+  const queryClient = useQueryClient()
   const [isSignUp, setIsSignUp] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -98,9 +99,10 @@ export function AuthForm() {
         
   
         // if (!user) throw new Error('Profile not found.');
+        await queryClient.invalidateQueries(['user'])
         toast({
-          title: 'user signed in',
-          description: '',
+          title: 'Succesful Sign in!',
+          description: 'You have successfully signed in.',
         });
         router.push('/dashboard');
         
@@ -155,7 +157,7 @@ export function AuthForm() {
     supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo:  "https://repair-match-kjhs6chfl-aman-deols-projects.vercel.app/dashboard"
+        redirectTo:  "/dashboard"
       }
     });
 

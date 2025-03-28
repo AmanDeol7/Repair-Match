@@ -18,6 +18,7 @@ import {
 import { ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { NotificationBell } from './notifications/notification-bell'
 
 const initUser = {
   avatar_url: "",
@@ -37,6 +38,7 @@ const Profile = () => {
   const handleLogout = async () => {
     queryClient.clear();
     await supabase.auth.signOut();
+    await queryClient.invalidateQueries(['user'])
     setIsLoggedOut(true);
     router.push("/");
   };
@@ -61,6 +63,12 @@ const Profile = () => {
   return (
     <div>
       {isAuthenticated && !isLoggedOut? (
+        <>
+        
+          
+        
+      
+        
         <DropdownMenu>
           <Button variant="default" asChild>
             <DropdownMenuTrigger>
@@ -93,6 +101,7 @@ const Profile = () => {
             <DropdownMenuItem  onClick={handleLogout}>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        </>
       ) : (
         <div>
           <Button variant="default" asChild>

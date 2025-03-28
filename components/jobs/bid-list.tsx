@@ -1,16 +1,19 @@
 'use client'
 
 import { formatDistance } from 'date-fns'
+import { useState } from 'react'
+import { useToast } from '@/hooks/use-toast'
 import { useAuth } from '@/hooks/use-auth'
+import { supabase } from '@/lib/supabase/client'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { useToast } from '@/hooks/use-toast'
-import { supabase } from '@/lib/supabase/client'
 import type { Bid } from '@/lib/types/bid'
 
+type BidStatus = 'pending' | 'accepted' | 'rejected'
+
 interface BidListProps {
-  bids: Bid[]
+  bids: (Bid & { status: BidStatus })[]
   jobId: string
   isRequester: boolean
   onBidAccepted: () => void
@@ -18,6 +21,7 @@ interface BidListProps {
 
 export function BidList({ bids, jobId, isRequester, onBidAccepted }: BidListProps) {
   const { toast } = useToast()
+  const [acceptedBidId, setAcceptedBidId] = useState<string | null>(null)
 
   const handleAcceptBid = async (bidId: string) => {
     try {
@@ -29,7 +33,7 @@ export function BidList({ bids, jobId, isRequester, onBidAccepted }: BidListProp
 
       if (bidError) throw bidError
 
-      // Update job status and repairer
+      // Update job status and assign repairer
       const { error: jobError } = await supabase
         .from('repair_jobs')
         .update({
@@ -40,10 +44,14 @@ export function BidList({ bids, jobId, isRequester, onBidAccepted }: BidListProp
 
       if (jobError) throw jobError
 
+      // Update local state
+      setAcceptedBidId(bidId)
+
       toast({
         title: 'Success!',
         description: 'Bid accepted successfully.',
       })
+
       onBidAccepted()
     } catch (error: any) {
       toast({
@@ -85,8 +93,9 @@ export function BidList({ bids, jobId, isRequester, onBidAccepted }: BidListProp
                 onClick={() => handleAcceptBid(bid.id)}
                 className="mt-4"
                 size="sm"
+                disabled={acceptedBidId === bid.id}
               >
-                Accept Bid
+                {acceptedBidId === bid.id ? 'Bid Accepted' : 'Accept Bid'}
               </Button>
             )}
           </CardContent>

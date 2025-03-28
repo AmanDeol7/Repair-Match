@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { supabase } from '@/lib/supabase/client'
+import { sendNotification } from '@/lib/notifications/send-notification'
 
 interface BidFormProps {
   jobId: string
@@ -24,8 +25,15 @@ export function BidForm({ jobId, onBidSubmitted }: BidFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!user) return
-
+    
     try {
+      const { data: jobData, error: jobError } = await supabase
+        .from('repair_jobs')
+        .select('requester_id, title')
+        .eq('id', jobId)
+        .single()
+
+      if (jobError) throw jobError
       const { error } = await supabase.from('bids').insert({
         job_id: jobId,
         repairer_id: user.id,
@@ -35,6 +43,13 @@ export function BidForm({ jobId, onBidSubmitted }: BidFormProps) {
       })
 
       if (error) throw error
+      await sendNotification(
+        jobData.requester_id,
+        'new_bid',
+        'New Bid Received',
+        `You received a new bid of $${amount} on your job "${jobData.title}"`,
+        { jobId, bidAmount: amount }
+      )
 
       toast({
         title: 'Success!',

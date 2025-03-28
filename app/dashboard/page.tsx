@@ -14,7 +14,7 @@ import { JobCard } from '@/components/jobs/job-card'
 import { supabase } from '@/lib/supabase/client'
 import type { JobWithProfile } from '@/lib/types/job'
 import type { Bid } from '@/lib/types/bid'
-
+import BackButton from '@/components/back-button'
 export default function DashboardPage() {
   const { user } = useAuth()
   const { data: profile } = useProfile(user?.id)
@@ -75,7 +75,9 @@ export default function DashboardPage() {
 
   return (
     <div className="px-8 py-8">
-      <div className="mb-8">
+      <BackButton />
+
+      <div className="mt-8 mb-8">
         <Card>
           <CardContent className="pt-6">
             <div className=" flex items-center space-x-4 ">
@@ -115,9 +117,10 @@ export default function DashboardPage() {
         <TabsContent value="jobs">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {profile?.role === 'requester' ? (
+              myJobs.length>0?(
               myJobs.map((job) => (
                 <JobCard key={job.id} job={job} />
-              ))
+              ))): <p>No current Jobs.</p>
             ) : (
               myBids.map((bid) => (
                 <Card key={bid.id}>

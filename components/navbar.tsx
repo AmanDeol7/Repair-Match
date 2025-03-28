@@ -7,15 +7,15 @@ import { ThemeToggle } from './theme-toggle'
 import Profile from './Profile'
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
-import { useRouter } from 'next/navigation'
+import { NotificationBell } from './notifications/notification-bell'
 
 export function Navbar() {
 
   const { user, isAuthenticated } = useAuth();
     const userId = user?.id;
-
+   
     const { data: profile } = useProfile(userId);
-    
+    console.log(profile)
   
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-8 md:px-4 overflow-hidden">
@@ -44,7 +44,7 @@ export function Navbar() {
               <Link href="/repairers">Find Repairers</Link>
             </Button>}
             <ThemeToggle />
-           
+            <NotificationBell />
             <Profile/>
             
           </nav>
